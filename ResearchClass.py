@@ -89,7 +89,6 @@ class EvaluationMetrics():
 
     def win_rate(self):
         self.returns = self.returns.dropna()
-
         return round(100 * len(self.returns[self.returns > 0]) / self.returns.count(),2)
 
     def avg_trade(self):
@@ -269,12 +268,15 @@ class StrategyTemplate():
   
 
   def ApplyStrategyThroughTickers(self):
-    TRADE_BOOK = pd.DataFrame() #Global TradeBook of all stocks
+    TRADE_BOOK = pd.DataFrame()  # Global TradeBook of all stocks
     for ticker in self.ticker_list:
-      self.data = self.GetData(ticker)
-      self.AddIndicators()
-      ticker_specific_tradebook = self.ApplyStrategyThroughTime(ticker)
-      TRADE_BOOK = pd.concat([TRADE_BOOK, ticker_specific_tradebook]) #Add ticker_specific_tradebook to global TRADE_BOOK
+        self.data = self.GetData(ticker)
+        print(f"Processing {ticker} - Columns: {self.data.columns}")
+        if 'Return' not in self.data.columns:
+            print(f"'Return' is missing for {ticker}!")
+        self.AddIndicators()
+        ticker_specific_tradebook = self.ApplyStrategyThroughTime(ticker)
+        TRADE_BOOK = pd.concat([TRADE_BOOK, ticker_specific_tradebook])  # Add ticker's data to global TRADE_BOOK
     return TRADE_BOOK
   
   def ApplyStrategyThroughTime(self, ticker):
