@@ -6,7 +6,7 @@ self.data['SMA_METRIC'] = self.data['SMA_LONG'] - self.data['SMA_SHORT']
 self.data['BB_METRIC'] = self.data['BB_UPPER'] - self.data['BB_LOWER']
 
 self.data['PNL'] = self.data['Open'] - self.data['Close']
-self.data['PNL'] = self.data['PNL'].div(self.data['PNL'].abs())
+self.data['PNL'] = ((self.data['PNL'].div(self.data['PNL'].abs())).add(1)).div(2)
 #this will either be positive or negative
 #not sure how this will work with regression model but needs testing
 
